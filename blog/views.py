@@ -1,13 +1,15 @@
-# A view is a place where we put the "logic" of our application. It will request information from the model you created before and pass it to a template.Views are just Python functions.
+# A view is a place where we put the "logic" of our application. It will request information from the model you created before and pass it to a template.Views are just Python functions. views are supposed to do: connect models and templates. In our post_list view we will need to take the models we want to display and pass them to the template. In a view we decide what (model) will be displayed in a template.
 
 from django.shortcuts import render 
-''' In django render is used for loading the templates.So for this we
-import-from django.shortcuts import render
-its a template shortcut. Rendering is the process of gathering data (if any) and load the associated templates. '''
+from .models import Post
+from django.utils import timezone
 
 def post_list(request):
-    return render(request, 'blog/post_list.html', {})
-    #  we created a function (def) called post_list that takes request and will return the value it gets from calling another function render that will render (put together) our template blog/post_list.html.
+  posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date') 
+  return render(request, 'blog/post_list.html', {'posts': posts})
+    # We want published blog posts sorted by published_date.Variable for our QuerySet: 'posts'. Treat this as the name of our QuerySet. 
+
+    #  we created a function (def) called post_list that takes request and will return the value it gets from calling another function render that will render (put together) our template blog/post_list.html.In the render function we have one parameter request (everything we receive from the user via the Internet) and another giving the template file ('blog/post_list.html'). The last parameter, {}, is a place in which we can add some things for the template to use. We need to give them names (we will stick to 'posts' right now). :) It should look like this: {'posts': posts}. Please note that the part before : is a string; you need to wrap it with quotes: ''.
 
 ''' Why does Django's render() function need the “request” argument?
 The render() shortcut renders templates with a request context. Template context processors take the request object and return a dictionary which is added to the context.
@@ -17,3 +19,7 @@ def my_view(request):
     return render(None, "my_template.html", {'foo': 'bar'}) '''
 
 # In django, template is rendered to HTTPResponse. ie the template is interpreted and translated to appropriate output. In django templates can be rendered to http response (render_to_response) or string (render_to_string).
+
+''' In django render is used for loading the templates.So for this we
+import-from django.shortcuts import render
+its a template shortcut. Rendering is the process of gathering data (if any) and load the associated templates. '''
