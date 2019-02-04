@@ -1,29 +1,32 @@
-<html>
-    <head>
-        <title>Django Girls blog</title>
-    </head>
-    <body>
-      <div>
-        <h1><a href="/">Django Girls Blog</a></h1>
-      </div>
-      <!-- Django understands it as a list of objects.How we can display lists? Yes, with for loops!  -->
-      <!-- 'for' loop starts -->
+                   <!-- Connect two templates together. This is what extending templates is all about! We'll do this by adding an extends tag to the beginning of the file -->
+                   {% extends 'blog/base.html' %}
+                    
+                   <!-- You just created a block! You used the template tag % block % to make an area that will have HTML inserted in it. That HTML will come from another template that extends this template (base.html). -->
+                   
+                    {% block content %}
+                    {% for post in posts %}
+                    <div class="post">
+                        <div class="date">
+                        <p>Published: {{ post.published_date }}</p>
+                        </div>
 
-  {% for post in posts %}
-  <div>
-    <p>Published: {{ post.published_date }}</p>
-     <h2><a href="">{{ post.title }}</a></h2>
-     <p>{{ post.text }}</p>
-   
-  <div>
-  {% endfor %} 
+                        <!-- We want to have a link from a post's title in the post list to the post's detail page.So that it links to the post's detail page -->
 
-      <!-- 'for' loop ends -->
-    </body>
-</html>
+                        <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                        <p>{{ post.text }}</p>
+                    </div>
+                        {% endfor %}
+                        {% endblock %} 
+                    
 
 <!-- Everything you put between % for % and % endfor % will be repeated for each object in the list. -->
 
 <!-- To print a variable in Django templates, we use double curly brackets with the variable's name inside, like this: {{ posts }} -->
 
 <!-- Have you noticed that we used a slightly different notation this time ({{ post.title }} or {{ post.text }})? We are accessing data in each of the fields defined in our Post model. -->
+
+<!-- % url 'post_detail' pk=post.pk %. As you might suspect, the % % notation means that we are using Django template tags. This time we will use one that will create a URL for us!
+    
+The post_detail part means that Django will be expecting a URL in blog/urls.py with name=post_detail.
+
+And how about pk=post.pk? pk is short for primary key, which is a unique name for each record in a database. Because we didn't specify a primary key in our Post model, Django creates one for us (by default, a number that increases by one for each record, i.e. 1, 2, 3) and adds it as a field named pk to each of our posts. We access the primary key by writing post.pk, the same way we access other fields (title, author, etc.) in our Post object! -->

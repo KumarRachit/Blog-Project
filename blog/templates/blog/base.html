@@ -1,0 +1,46 @@
+{% load static %} <!--  loading static files here.We also need to tell our HTML template that we added some CSS. -->
+<html>
+    <head>
+            <title>Django Girls blog</title>
+
+        <!-- Bootstrap style link starts -->
+        
+        <link rel="stylesheet"
+        href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+        <!-- Bootstrap style link ends -->
+
+        <!-- Google font link starts.This line will import a font called Lobster from Google Fonts -->
+
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+        <!-- Google font link ends -->
+
+        <!-- We just told our template where our CSS file is located. -->
+
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    </head>
+    <body>
+      <div class="page-header">
+        <h1><a href="/">Django Girls Blog</a></h1>
+    </div>
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-8">
+
+              <!-- We created a block! You used the template tag % block % to make an area that will have HTML inserted in it. That HTML will come from another template that extends this template (base.html). -->
+
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
+
+<!-- Everything you put between % for % and % endfor % will be repeated for each object in the list. -->
+
+<!-- To print a variable in Django templates, we use double curly brackets with the variable's name inside, like this: {{ posts }} -->
+
+<!-- Have you noticed that we used a slightly different notation this time ({{ post.title }} or {{ post.text }})? We are accessing data in each of the fields defined in our Post model. -->
