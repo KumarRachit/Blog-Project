@@ -26,7 +26,7 @@ def post_new(request):
     if form.is_valid():
       post = form.save(commit=False) # we save the form with 'form.save'.'commit=False' means that we don't want to save the Post model yet – we want to add the author first.
       post.author = request.user # we add an author (since there was no author field in the PostForm and this field is required).
-      post.published_date = timezone.now()
+      # post.published_date = timezone.now() New posts will be saved as drafts that we can review later on rather than being instantly published.Currently when we're creating new posts using our New post form the post is published directly. To instead save the post as a draft, remove this line.
       post.save() # post.save() will preserve changes (adding the author) and a new blog post is created!
       return redirect('post_detail', pk=post.pk) # "Go to the post_detail page for the newly created post".post_detail is the name of the view we want to go to. Remember that this view requires a pk variable? To pass it to the views, we use pk=post.pk, where post is the newly created blog post!
   else:
@@ -46,6 +46,10 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+def post_draft_list(request):
+    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
+    return render(request, 'blog/post_draft_list.html', {'posts': posts}) # The line posts = Post.objects.filter(published_date__isnull=True).order_by('created_date') makes sure that we take only unpublished posts (published_date__isnull=True) and order them by created_date (order_by('created_date')).
 
 ''' Why does Django's render() function need the “request” argument?
 The render() shortcut renders templates with a request context. Template context processors take the request object and return a dictionary which is added to the context.

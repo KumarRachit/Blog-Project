@@ -7,7 +7,7 @@
                     {% for post in posts %}
                     <div class="post">
                         <div class="date">
-                        <p>Published: {{ post.published_date }}</p>
+                        <p>Published: {{ post.published_date|date:'d-m-Y' }}</p>
                         </div>
 
                         <!-- We want to have a link from a post's title in the post list to the post's detail page.So that it links to the post's detail page -->

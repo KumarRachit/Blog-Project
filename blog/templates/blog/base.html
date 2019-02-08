@@ -25,8 +25,9 @@
       <div class="page-header">
 
         <!-- we want to call our new view post_new. The class "glyphicon glyphicon-plus" is provided by the bootstrap theme we are using, and will display a plus sign for us. -->
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated %} <!-- Other people won't be able to edit existing posts. -->
             <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+            <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a> <!--  We don't want to show our list of drafts to everybody, so we'll put it inside the % if user.is_authenticated %.We created a view post_list that displays only published blog posts (those with non-empty published_date).Time to do something similar, but for draft posts. -->
         {% endif %}
             <h1><a href="/">Django Girls Blog</a></h1>
     </div>
