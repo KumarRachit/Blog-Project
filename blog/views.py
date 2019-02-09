@@ -51,6 +51,16 @@ def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts}) # The line posts = Post.objects.filter(published_date__isnull=True).order_by('created_date') makes sure that we take only unpublished posts (published_date__isnull=True) and order them by created_date (order_by('created_date')).
 
+def post_publish(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.publish()
+    return redirect('post_detail', pk=pk)
+
+def post_remove(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('post_list') # After deleting a post we want to go to the webpage with a list of posts, so we are using redirect.
+
 ''' Why does Django's render() function need the “request” argument?
 The render() shortcut renders templates with a request context. Template context processors take the request object and return a dictionary which is added to the context.
 A common template context processor is the auth context processor, which takes the request object, and adds the logged-in user to the context.
