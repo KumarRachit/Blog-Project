@@ -1,5 +1,5 @@
 # A view is a place where we put the "logic" of our application. It will request information from the model you created before and pass it to a template.Views are just Python functions. views are supposed to do: connect models and templates. In our post_list view we will need to take the models we want to display and pass them to the template. In a view we decide what (model) will be displayed in a template.
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404 # Importing render function and 404 error
 from .models import Post
@@ -17,6 +17,7 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
+@login_required
 def post_new(request):
   if request.method == "POST":
     form = PostForm(request.POST) # we want to construct the PostForm with data from the form.
@@ -33,6 +34,7 @@ def post_new(request):
         form = PostForm() # # To create a new Post form, we need to call PostForm() and pass it to the template. 
         return render(request, 'blog/post_edit.html', {'form': form})
 
+@login_required
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -47,15 +49,18 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
+@login_required
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts}) # The line posts = Post.objects.filter(published_date__isnull=True).order_by('created_date') makes sure that we take only unpublished posts (published_date__isnull=True) and order them by created_date (order_by('created_date')).
 
+@login_required
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
     return redirect('post_detail', pk=pk)
 
+@login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
