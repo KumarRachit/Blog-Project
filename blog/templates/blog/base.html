@@ -1,7 +1,7 @@
 {% load static %} <!--  loading static files here.We also need to tell our HTML template that we added some CSS. -->
 <html>
     <head>
-            <title>Django Girls blog</title>
+            <title>Blog Website</title>
 
         <!-- Bootstrap style link starts -->
         
@@ -28,12 +28,12 @@
         {% if user.is_authenticated %} <!-- Other people won't be able to edit existing posts. -->
             <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
             <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
-            <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p> 
+            <p class="top-menu"><span>Hello ' {{ user.username }} '</span><small><a  href="{% url 'logout' %}">Log out</a></small></p> 
             {% else %}
             <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
             <!--  We don't want to show our list of drafts to everybody, so we'll put it inside the % if user.is_authenticated %.We created a view post_list that displays only published blog posts (those with non-empty published_date).Time to do something similar, but for draft posts. -->
         {% endif %}
-            <h1><a href="/">Django Girls Blog</a></h1>
+            <h1><a href="/">Blog Website</a></h1>
     </div>
     <div class="content container">
         <div class="row">
