@@ -1,5 +1,5 @@
 # A view is a place where we put the "logic" of our application. It will request information from the model you created before and pass it to a template.Views are just Python functions. views are supposed to do: connect models and templates. In our post_list view we will need to take the models we want to display and pass them to the template. In a view we decide what (model) will be displayed in a template.
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required # from django.contrib.auth.decorators module we are importing decorator called login_required
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404 # Importing render function and 404 error
 from .models import Post
@@ -91,3 +91,5 @@ In blog/urls.py we created a URL rule named post_detail that refers to a view ca
 ''' Most of the time you will use form.save() without commit=False, but in this case, we need to supply it.  '''
 
 ''' Page redirection is needed for many reasons in web application. You might want to redirect a user to another page when a specific action occurs, or basically in case of error.In Django, redirection is accomplished using the 'redirect' method. '''
+
+''' Decorators can be used to restrict access to certain views. Django come with some built-in decorators, like login_required, require_POST or has_permission. '''
