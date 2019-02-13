@@ -18,6 +18,20 @@ class Post(models.Model): #defines our model(it is an object)
     def __str__(self): # __str__() we will get a text (string) with a Post title
         return self.title 
 
+class Comment(models.Model):
+    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='comments') # The related_name option in models.ForeignKey allows us to have access to comments from within the Post model.
+    author = models.CharField(max_length=200)
+    text = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+    approved_comment = models.BooleanField(default=False) # this is true/false field.
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
+
+    def __str__(self):
+        return self.text
+
 ''' django.conf.settings - Will import settings object from django.conf package (Django's provided files) and abstracts the concepts of default settings and site-specific settings; it presents a single interface. It also decouples the code that uses settings from the location of your settings.
 
  on_delete=models.CASCADE - This is the behaviour to adopt when the referenced object is deleted. It is not specific to django, this is an SQL standard.CASCADE: When the referenced object is deleted, also delete the objects that have references to it (When you remove a blog post for instance, you might want to delete comments as well). SQL equivalent: CASCADE.

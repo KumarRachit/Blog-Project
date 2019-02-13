@@ -79,3 +79,7 @@ p span:hover{
   text-decoration: none;
   color: #000;
 }
+
+.comment {
+  margin: 20px 0px 20px 20px;
+}
