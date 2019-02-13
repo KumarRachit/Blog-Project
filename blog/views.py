@@ -2,9 +2,9 @@
 from django.contrib.auth.decorators import login_required # from django.contrib.auth.decorators module we are importing decorator called login_required
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404 # Importing render function and 404 error
-from .models import Post
+from .models import Post, Comment
 from django.utils import timezone
-from .forms import PostForm # Importing our 'form whose name i.e PostForm' from 'forms.py'
+from .forms import PostForm, CommentForm # Importing our 'form whose name i.e PostForm' from 'forms.py' and 'comment form' from 'forms.py'
 
 def post_list(request):
   posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date') 
@@ -65,6 +65,31 @@ def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('post_list') # After deleting a post we want to go to the webpage with a list of posts, so we are using redirect.
+
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = CommentForm()
+    return render(request, 'blog/add_comment_to_post.html', {'form': form})
+
+@login_required
+def comment_approve(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.approve()
+    return redirect('post_detail', pk=comment.post.pk)
+
+@login_required
+def comment_remove(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return redirect('post_detail', pk=comment.post.pk)
 
 ''' Why does Django's render() function need the “request” argument?
 The render() shortcut renders templates with a request context. Template context processors take the request object and return a dictionary which is added to the context.

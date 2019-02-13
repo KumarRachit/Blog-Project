@@ -18,6 +18,9 @@ class Post(models.Model): #defines our model(it is an object)
     def __str__(self): # __str__() we will get a text (string) with a Post title
         return self.title 
 
+    def approved_comments(self):
+        return self.comments.filter(approved_comment=True)
+
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='comments') # The related_name option in models.ForeignKey allows us to have access to comments from within the Post model.
     author = models.CharField(max_length=200)
